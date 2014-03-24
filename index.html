@@ -2,69 +2,115 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<title>TODO Manager</title>
 		<link rel="stylesheet" type="text/css" href="styles.css">
 		<script src="js/jquery-2.1.0.js"></script>
-		<script>
-			$(function(){
-				//load header and select the appropriate nav link
-				$("header").load("ViewHeader.html", function() {
-				  $("a#nav-home").addClass("selected"); 
-				});
-				//load footer
-				$("footer").load("ViewFooter.html");
-			});
-		</script>
+		<script src="js/jquery-ui.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
 	</head>
 
 	<body>
-	
-		<header></header>
+		<!-- content navidation starts -->
+		<div id="content">
+			<header>
+				<div class = "wrap">
+					<a id="logo"><div class = "title">Todo Manager</div></a>
+					<nav>
+						<ul>
+							<!--logged out-->
+							<li><a id = "nav-home" href="#content-1">Home</a></li>
+							<li><a id = "nav-login" href="#content-2">Log in</a></li>
+							<li><a id = "nav-signup" href="#content-3">Sign up</a></li>
+							<!--logged in-->
+							<li><a id = "nav-todo" href="#content-4">Todo</a></li>
+							<li><a id = "nav-profile" href="#content-5">Profile</a></li>
+							<!--common-->
+							<li><a id = "nav-news" href="#content-6">News</a></li>
+							<li><a id = "nav-contact" href="#content-7">Contact</a></li>
+						</ul>
+					</nav>
+					<div class="clear"></div>
+				</div>
+			</header>
 
-		<div class = "banner home-banner">
-			<div class="wrap center banner-text">	
-				<h2>Lets get some work done!</h2>
-				<p>
-					Welcome to the ToDo Manager- 
-					the simplest and sleekest productivity app.
-				</p>
-				<a class="btn" href = "login.html">Login</a><br/>
-				or <a href = "signup.html">Sign Up</a>
+			<!-- start of content body -->
+
+			<!--Home page-->
+			<div id="content-1">
+				<div class = "banner home-banner">
+					<div class="wrap center banner-text">	
+						<h2>Lets get some work done!</h2>
+						<p>
+							Welcome to the ToDo Manager- 
+							the simplest and sleekest productivity app.
+						</p>
+						<a class="btn" href="#">Login</a><br/>
+						or <a href="#">Sign Up</a>
+					</div>
+					<div style="clear:both"></div>
+				</div>
+				<div class = "wrap">
+					<div class = "container-box third left center homepage">
+						<a>My Project</a>
+						<p>
+							need to add some text
+						</p>
+					</div>
+					<div class = "container-box third center homepage">
+						<a> Special Features(TODO:Update)</a>
+						<p>
+						<ul style= "text-align:left;">
+							<li> Task Summary
+							<li>Cancel or delte a task
+							<li>A minimalist and clean display.
+							<li>undo accidental increments/completes
+							<li>Dynamic creation of add to do and edit to do areas.
+							<li>Funny and motivating message on completing all tasks :P
+						</ul>
+						</p>
+					</div>
+					<div class = "container-box third right center homepage">
+						<a href = "#"> Contact us</a>
+						<ul style= "text-align:left;">
+							<li>email : xxxxxx@xx.com
+							<li>phone : xx-xxxxxxx
+							<li>fax	  : xxxxxxxxxx
+						</ul>
+					</div>
+					
+				</div>
 			</div>
+
+			<!--login page-->
+			<div id ="content-2">Login page</div>
+
+			<!--signup page-->
+			<div id ="content-3">signup page</div>
+
+			<!--todo page-->
+			<div id ="content-4">Todo page</div>
+
+			<!--profile page-->
+			<div id ="content-5">Profile page</div>
+
+			<!--News page-->
+			<div id ="content-6">News page</div>
+
+			<!--Contact page-->
+			<div id ="content-7">Contact page</div>
+
+
+			<!-- end of content -->
 			<div style="clear:both"></div>
 		</div>
-		<div class = "wrap">
-			<div class = "container-box third left center homepage">
-				<a>My Project</a>
-				<p>
-					need to add some text
-				</p>
-			</div>
-			<div class = "container-box third center homepage">
-				<a> Special Features(TODO:Update)</a>
-				<p>
-				<ul style= "text-align:left;">
-					<li> Task Summary
-					<li>Cancel or delte a task
-					<li>A minimalist and clean display.
-					<li>undo accidental increments/completes
-					<li>Dynamic creation of add to do and edit to do areas.
-					<li>Funny and motivating message on completing all tasks :P
-				</ul>
-				</p>
-			</div>
-			<div class = "container-box third right center homepage">
-				<a href = "?page=contact"> Contact us</a>
-				<ul style= "text-align:left;">
-					<li>email : xxxxxx@xx.com
-					<li>phone : xx-xxxxxxx
-					<li>fax	  : xxxxxxxxxx
-				</ul>
-			</div>
-			
-		</div>
-		<div style="clear:both"></div>
 		<div style="height : 40px;"></div> <!-- to leave a gap at the end -->
 
-		<footer></footer>
+		<footer>
+			<p> 
+				&copy;2013 TODO: Update this</a>
+				<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.cs.toronto.edu%2F%7Earnold%2Fcp3101b%2Fassignments%2F01%2F&amp;width=100&amp;layout=button_count&amp;action=like&amp;show_faces=true&amp;share=true&amp;height=21&amp;appId=340577319302267" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:130px; float:right; height:21px;" allowTransparency="true"></iframe>
+			</p>
+		</footer>
+
 	</body>
 </html>

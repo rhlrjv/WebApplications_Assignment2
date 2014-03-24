@@ -374,11 +374,35 @@ nav a{
 	font-family: "roboto", sans-serif;
 }
 
-nav a:hover{
+nav a:hover, a:focus{
 	color: #409bcc;
 	background-color:#eee;
+	outline:none;
 }
-.selected{
+
+nav ul{
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+	float: right;
+}
+
+nav li{
+	list-style: none;
+	display: inline-block;
+	position: relative;
+	top: 0;
+	margin: 1px .2em 0 0;
+	border-bottom-width: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+
+nav li:focus, li:hover{
+	outline:none;
+}
+
+.ui-tabs-active a{
 	border-bottom: 2px solid #dd4b3b;
 }
 
