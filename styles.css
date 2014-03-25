@@ -9,6 +9,7 @@ a{
 	text-decoration: none;
 	color: #dd4b3b;
 	font-family: Georgia, serif;
+	cursor: pointer;
 }
 
 a:hover{
