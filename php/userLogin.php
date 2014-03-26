@@ -9,64 +9,98 @@
 		$_SESSION['is_logged_in']=="false" on failure
 
 	Parameters: 
-
-		username - required, non-empty string, the users user name
-		password - required, non-empty string, the users password
+		
+		RequestType - required, non-empty string, not used in this case
+		UserName - required, non-empty string, the users user name
+		Password - required, non-empty string, the users password
 
 	Returns: 
-		{ status: "ok" } on success
-		{ status: "<error messages>" } on failure
+		{ status: "ok" ,errors: "<unimportant>"} on success
+		{ status: "error" , errors: "{msg: "<error msg array>" , username: "<error in user?>" , password: "<passwordError?>"}"} on failure
+			error message codes = true/false 
+				any true value -> field marked as error field in front end
 	
 	------------------------------------------------ */
 
-	session_save_path("sess");
-	session_start(); 
+	require 'config.inc';
+	require 'Model.php';
+
 	header('Content-Type: application/json');
 
 	// ------------------------------------------------
 	// Default reply
 	// ------------------------------------------------
 	$reply=array();
-	$reply['status']='ok';
+	$errors = array();
 
 	// ------------------------------------------------
 	// Default resulting state
-	// ------------------------------------------------
-	$_SESSION["is_logged_in"]="false";
+	// ------------------------------------------------	
+	$reply['status'] ='error';
+
+	$errors['msg'] = array();
+	$errors['username'] = false ;//no error
+	$errors['password'] = false ;//no error
 
 	// ------------------------------------------------
-	// Check parameters
+	// retreive assessed data
 	// ------------------------------------------------
-	if(empty($_REQUEST['user'])){
-		$reply['status']='user must be supplied';
-	}
-	if(empty($_REQUEST['password'])){
-		// Below is conceptually wrong! You should not return HTML.
-		// These scripts should only return data. It is not concerned
-		// with user interface.
-		$reply['status'] = $reply['status'] . '<br/> password must be supplied';
-	}
 
-	if($reply['status']!='ok'){
+	if(!isset($_REQUEST['data']) || !isset($_REQUEST['requestType']) )
 		goto leave;
+
+	$data = json_decode($_REQUEST['data'],true);
+	$requestType = $_REQUEST["requestType"];
+	$requestUsername = $data["UserName"];
+	$requestPassword = $data["Password"];
+
+	// ------------------------------------------------
+	// check Parameters
+	// ------------------------------------------------
+
+	if(empty($requestUsername) || empty($requestPassword)){
+		$errors['msg'][] ='Incomplete form fields';
+
+		if(empty($requestPassword))
+			$errors['password'] = true;
+		if(empty($requestUsername))
+			$errors['username'] = true;
 	}
 
+	if (preg_match('/[\'^£$%&*()}{@#~?><>,|=+¬-]/', $requestUsername))
+	{
+	    $errors['msg'][] ='Username cannot have special characters';
+	    $errors['username'] = true;
+	}
+
+	if (preg_match('/[\'^£$%&*()}{@#~?><>,|=+¬-]/', $requestPassword))
+	{
+	    $errors['msg'][] ='Password cannot have special characters';
+	    $errors['password'] = true;
+	}
+
+	if (count($errors['msg']) > 0)
+		goto leave;
 	// ------------------------------------------------
 	// Perform operation 
 	// ------------------------------------------------
 
-	// Check the database...SELECT FROM ... $1 ... $2
-	if($_REQUEST['user']!="arnold" || $_REQUEST['password']!="spiderman"){
-		$reply['status']="invalid login";
-		$_SESSION["is_logged_in"]="true";
-		goto leave;
-	} else {
-		$_SESSION["is_logged_in"]="true";
+	if($GLOBALS['userobj']->login($_SESSION['dbconn'], $requestUsername, $requestPassword) == true)
+	{
+		$reply['status']= 'ok';
+		setState("logged_in");
+		$_SESSION['Username'] = $requestUsername;
+	}
+	else
+	{
+		setState("logged_out");
+		$errors['msg'][] ='Incorrect login details';
 	}
 
 	// ------------------------------------------------
 	// Send reply 
 	// ------------------------------------------------
 	leave:
+	$reply['errors'] = $errors;
 	print json_encode($reply);
 ?>
