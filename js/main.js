@@ -73,12 +73,21 @@ function signupFormSubmit(){
 
 	$.ajax({
 		type: "POST",
-		url: "php/test.php",
+		url: "php/userCreate.php",
 		dataType: 'json',
 		data: sendData,
 		success: function(json)
 		{
 			alert(JSON.stringify(json)); // show response from the php script.
+			if (json["status"] =='ok')
+				accessTodoPage()
+			else
+			{
+				error = json['errors'];
+				//alert(JSON.stringify(error));
+				if (error['msg'].length > 0)
+					alert(error['msg'].join("\n"));
+			}
 		}
 	});
 }
