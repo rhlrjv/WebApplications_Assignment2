@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>TODO Manager</title>
+		<link rel="stylesheet" type="text/css" href="styles.css">
+		<script src="js/jquery-2.1.0.js"></script>
+		<script src="js/jquery-ui.js"></script>
+		<script type="text/javascript" src="js/serializeobject.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+	</head>
+
+	<body>
+		<!-- content navidation starts -->
+		<div id="content">
+			<header>
+				<div class = "wrap">
+					<a id="logo"><div class = "title">Todo Manager</div></a>
+					<nav>
+						<ul>
+							<!--logged out-->
+							<li><a id = "nav-home" href="#content-1">Home</a></li>
+							<li><a id = "nav-login" href="#content-2">Log in</a></li>
+							<li><a id = "nav-signup" href="#content-3">Sign up</a></li>
+							<!--logged in-->
+							<li><a id = "nav-todo" href="#content-4">Todo</a></li>
+							<li><a id = "nav-profile" href="#content-5">Profile</a></li>
+							<!--common-->
+							<li><a id = "nav-news" href="#content-6">News</a></li>
+							<li><a id = "nav-contact" href="#content-7">Contact</a></li>
+						</ul>
+					</nav>
+					<div class="clear"></div>
+				</div>
+			</header>
+
+			<!-- start of content body -->
+
+			<!--Home page-->
+			<div id="content-1">
+				<div class = "banner home-banner">
+					<div class="wrap center banner-text">	
+						<h2>Lets get some work done!</h2>
+						<p>
+							Welcome to the ToDo Manager- 
+							the simplest and sleekest productivity app.
+						</p>
+						<a class="btn" onclick="accessLoginForm()">Login</a><br/>
+						or <a onclick="accessSignupForm()">Sign Up</a>
+					</div>
+					<div style="clear:both"></div>
+				</div>
+				<div class = "wrap">
+					<div class = "container-box third left center homepage">
+						<a>My Project</a>
+						<p>
+							need to add some text
+						</p>
+					</div>
+					<div class = "container-box third center homepage">
+						<a> Special Features(TODO:Update)</a>
+						<p>
+						<ul style= "text-align:left;">
+							<li> Task Summary
+							<li>Cancel or delte a task
+							<li>A minimalist and clean display.
+							<li>undo accidental increments/completes
+							<li>Dynamic creation of add to do and edit to do areas.
+							<li>Funny and motivating message on completing all tasks :P
+						</ul>
+						</p>
+					</div>
+					<div class = "container-box third right center homepage">
+						<a onclick = "accessContactForm()"> Contact us</a>
+						<ul style= "text-align:left;">
+							<li>email : xxxxxx@xx.com
+							<li>phone : xx-xxxxxxx
+							<li>fax	  : xxxxxxxxxx
+						</ul>
+					</div>
+					
+				</div>
+			</div>
+
+			<!--login page-->
+			<div id ="content-2">
+				<div class = "wrap">
+					<div class = "form">
+						<h1> User Login </h1>
+						<form id="login-form">
+							<input class="text-entry ninety-width"  placeholder="User Name" 
+							name="UserName" type="text"/>
+							<input class="text-entry ninety-width"  placeholder="Password" 
+							name="Password" type="password"/><br/>
+							<input class = "btn half-width left" type="submit" 
+							name="submitlogin" value="Login" id="login-submit-button"/>
+						</form>
+
+						<input class = "btn red-btn half-width right" type="submit" onclick = "accessSignupForm()"
+							name="submitSignup" value="New User" id="login-reset-button"/>
+
+						<div class="clear"></div>
+						<div class = "center surround-space"> <a href="#">Forgot Password</a></div>
+					</div>
+				</div>
+			</div>
+
+			<!--signup page-->
+			<div id ="content-3">
+				<div class = "wrap">
+					<div class = "form">
+						<h1> User Sign-Up </h1>
+						<form id= "signup-form">
+							<input class="text-entry ninety-width"  placeholder="Enter User Name*" 
+								name="UserName" type="text"/>
+							<input class="text-entry quarter-width left"  placeholder="Enter Password*" 
+								name="Password" type="password" />
+							<input class="text-entry quarter-width right"  placeholder="Re-enter Password*" 
+								name="reEnterPassword" type="password"/><br/>
+							<input class="text-entry quarter-width left"  placeholder="Email ID*" 
+								name="email" type="email"/>
+							<input class="text-entry quarter-width right date" value="yyyy-mm-dd" 
+								name="dob" type="date"/><br/>
+							<input class = "btn half-width left" type="submit" name="submitsSignup" value="Signup"/>
+						</form>
+
+						<input class = "btn red-btn half-width right" type="submit" name="cancelSignup" 
+						value="Cancel" onclick= "accessHomwePage()"/>
+						
+						<div style="clear:both"></div>
+					</div>
+				</div>
+			</div>
+
+			<!--todo page-->
+			<div id ="content-4">
+				under development
+			</div>
+
+			<!--profile page-->
+			<div id ="content-5">
+				<div class = "wrap">
+					<div class = "form">
+						<h1> Profile </h1>
+						<form method="post">
+							<input type="hidden"name="RandToken"/>
+							<input class="text-entry ninety-width"  placeholder="Enter User Name" name="profile_UserName" type="text" readonly />
+							<input class="text-entry quarter-width left"  placeholder="Enter Password" name="profile_Password" type="password"/>
+							<input class="text-entry quarter-width right"  placeholder="Re-enter Password" name="profile_reEnterPassword" type="password"/><br/>
+							<input class="text-entry quarter-width left"  placeholder="Email ID" name="profile_email" type="email" />
+							<input class="text-entry quarter-width right date" name="profile_dob" type="date"/><br/>
+							<input class = "btn half-width left" type="submit" name="submitUpdate" value="Update"/>
+							<input class = "btn red-btn half-width right" type="submit" name="cancelUpdate" value="Cancel"/>
+						</form>
+						<div style="clear:both"></div>
+					</div>
+				</div>
+			</div>
+
+			<!--News page-->
+			<div id ="content-6">
+				<div class = "banner news-banner">
+				</div>
+				<div class = "wrap">
+					<div class = "container-box">
+						<h1>The News</h1>
+						<p>Lorem ipsum dolor sit amet, Integer eget augue dignissim, tristique dolor molestie, laoreet felis. Integer consequat semper enim.</p>
+						<hr/>
+						<p>Consectetur adipiscing elit. Integer eget augue dignissim, tristique dolor molestie, laoreet felis. Integer consequat semper enim.</p>
+						<hr/>
+						<p>Lorem ipsum dolor sit amet, augue dignissim, tristique dolor molestie, laoreet felis. Integer consequat semper enim.</p>
+						<hr/>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. laoreet felis. Integer consequat semper enim.</p>
+						<hr/>
+						
+					</div>
+				</div>
+			</div>
+
+			<!--Contact page-->
+			<div id ="content-7">
+				<div class = "banner contact-banner">
+				</div>
+				<div class = "wrap">
+					<div class = "container-box third left" style = "height :270px;">
+						<h1>Get in touch</h1>
+						<ul style= "text-align:left;">
+							<li>email : xxxxxx@xx.com
+							<li>phone : xx-xxxxxxx
+							<li>fax	  : xxxxxxxxxx
+						</ul>
+					</div>
+					
+					<div class = "container-box right two-third" style = "height :270px;">
+						<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.218230627523!2d103.7793494770413!3d1.2916308735990651!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x488d08d6c1f88d6b!2sNational+University+of+Singapore!5e0!3m2!1sen!2ssg!4v1392821170034" width="620" height="260" frameborder="0" style="border:0"></iframe>
+					</div>
+				</div>
+				<div style="clear:both"></div>
+			</div>
+
+			<!-- end of content -->
+			<div style="clear:both"></div>
+		</div>
+		<div style="height : 40px;"></div> <!-- to leave a gap at the end -->
+
+		<footer>
+			<p> 
+				&copy;2013 TODO: Update this</a>
+				<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.cs.toronto.edu%2F%7Earnold%2Fcp3101b%2Fassignments%2F01%2F&amp;width=100&amp;layout=button_count&amp;action=like&amp;show_faces=true&amp;share=true&amp;height=21&amp;appId=340577319302267" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:130px; float:right; height:21px;" allowTransparency="true"></iframe>
+			</p>
+		</footer>
+
+	</body>
+</html>
