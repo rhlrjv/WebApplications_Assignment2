@@ -117,9 +117,9 @@
 	if($GLOBALS['userobj']->signup($_SESSION['dbconn'], $requestUsername, $requestPassword, $requestEmail, $requestDob) == true)
 	{
 		$reply['status']= 'ok';
-		goto leave;
+		setState("logged_in");
+		$_SESSION['Username'] = $requestUsername;
 	} 
-
 	else 
 	{
 		$errors['msg'][] ='Incorrect sign up details';
