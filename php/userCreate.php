@@ -30,7 +30,11 @@
 	// ------------------------------------------------
 	// Default reply
 	// ------------------------------------------------
+<<<<<<< HEAD
 	$reply=array();
+=======
+	$reply = array();
+>>>>>>> origin/master
 	$errors = array();
 
 	// ------------------------------------------------
@@ -78,6 +82,7 @@
 			$errors['email'] = true;
 		if(empty($requestDob))
 			$errors['dob'] = true;
+<<<<<<< HEAD
 	}
 
 	if($requestPassword != $requestReenterpassword)
@@ -94,6 +99,24 @@
 	    $errors['reenterpassword'] = true;
 	}
 
+=======
+	}
+
+	if($requestPassword != $requestReenterpassword)
+	{
+		$errors['msg'][] ='Passwords dont match';
+		$errors['password'] = true;
+		$errors['reenterpassword'] = true;
+	}
+
+	if (preg_match('/[\'^£$%&*()}{@#~?><>,|=+¬-]/', $requestUsername))
+	{
+	    $errors['msg'][] ='Username cannot have special characters';
+	    $errors['username'] = true;
+	    $errors['reenterpassword'] = true;
+	}
+
+>>>>>>> origin/master
 	if (preg_match('/[\'^£$%&*()}{@#~?><>,|=+¬-]/', $requestPassword))
 	{
 	    $errors['msg'][] ='Password cannot have special characters';

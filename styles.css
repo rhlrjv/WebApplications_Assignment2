@@ -1,4 +1,4 @@
-body{
+html body{
 	background-color: #f6f6f6;
 	font-family:"Roboto", sans-serif;
 	margin: 0;
@@ -118,6 +118,11 @@ footer p{
 	border: 1px solid #bbbbbb;
 	border-radius: 3px;
 	background-color : #f6f6f6;
+}
+
+.text-error{
+	border: 1px solid #dd4b3b;
+	background-color : #dddddd;
 }
 
 .date{
