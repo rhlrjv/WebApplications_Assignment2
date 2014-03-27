@@ -183,26 +183,10 @@ function constructTodo(i,todo){
 function todoPageBuilder(){
 	$.ajax({
 		type: "POST",
-<<<<<<< HEAD
-		url: "php/userCreate.php",
-=======
 		url: "php/todoRetreiveAll.php",
->>>>>>> origin/master
 		dataType: 'json',
 		success: function(json)
 		{
-<<<<<<< HEAD
-			alert(JSON.stringify(json)); // show response from the php script.
-			if (json["status"] =='ok')
-				accessTodoPage()
-			else
-			{
-				error = json['errors'];
-				//alert(JSON.stringify(error));
-				if (error['msg'].length > 0)
-					alert(error['msg'].join("\n"));
-			}
-=======
 			console.log(JSON.stringify(json)); // show response from the php script.
 			if (json["status"] =='ok'){
 				var todos = json['todos'];
@@ -214,7 +198,6 @@ function todoPageBuilder(){
 			}
 			else
 				;//error
->>>>>>> origin/master
 		}
 	});
 }
