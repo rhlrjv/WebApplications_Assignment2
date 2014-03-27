@@ -150,6 +150,17 @@ footer p{
 	border-left: 5px solid #777;
 }
 
+.todo-modifiers{
+	opacity : 0.3;
+	-webkit-transition: opacity 1s; /* For Safari 3.1 to 6.0 */
+	transition: opacity 1s;
+}
+
+.todo-entry:hover .todo-modifiers{
+	opacity : 1;
+}
+
+
 .important{
 	border-left: 5px solid #dd4b3b;
 }
@@ -208,6 +219,7 @@ footer p{
 .progressbar > div {
 	background-color: #48b0e7; 
 	height: 18px;
+	width:0px;
 	border-radius: 3px;
 }
 

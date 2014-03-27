@@ -7,7 +7,8 @@
 	$reply['status'] ='ok';
 
 	for($i = 0;$i<10;$i++) {
-		$todo['todoName'] = "Todo Name $i";
+		$todo['todoId'] = $i*2; //just a place holder
+		$todo['todoName'] = "this is a Todo Name $i";
 		$todo['completedHrs'] = rand(0,5);
 		$todo['totalHrs'] = $todo['completedHrs'] + rand(0,5);
 		if (rand(0,2) == 0)
