@@ -13,7 +13,7 @@
 		dob - required, non-empty string, the users date of birth
 
 	Returns: 
-		{ status: "ok" ,userinfo: "{username: "<username from db>" , password: "<password from db>" , email: "<email from db>" , dob: "<dob from db>"}"}} on success
+		{ status: "ok" ,errors: "{msg: "<error msg array>"}", userinfo: "{username: "<username from db>" , password: "<password from db>" , email: "<email from db>" , dob: "<dob from db>"}"}} on success
 		
 		
 
@@ -28,6 +28,7 @@
 	// Default reply
 	// ------------------------------------------------
 	$reply=array();
+	$errors = array();
 	$userinfo = array();
 
 	$currentUserObj = new user();
@@ -35,7 +36,9 @@
 	// ------------------------------------------------
 	// Default resulting state
 	// ------------------------------------------------
-	$reply['status'] ='ok';
+	$reply['status'] ='error';
+
+	$errors['msg'] = array();
 
 	$userinfo['username'] = "" ;
 	$userinfo['password'] = "" ;
@@ -46,8 +49,8 @@
 	// retreive assessed data
 	// ------------------------------------------------
 
-	if(!isset($_REQUEST['data']) || !isset($_REQUEST['requestType']) )
-		goto leave;
+	//if(!isset($_REQUEST['requestType']) )
+		//goto leave;
 
 	// ------------------------------------------------
 	// Check parameters
@@ -59,16 +62,26 @@
 	// ------------------------------------------------
 
 	// Check the database...SELECT FROM ... $1 ... $2
-	$currentUserObj = $GLOBALS['userobj']->getUserObj ($_SESSION['dbconn'], $_SESSION['Username'])
+	$currentUserObj = $GLOBALS['userobj']->getUserObj ($_SESSION['dbconn'], $_SESSION['Username']);
+	if($currentUserObj != false)
+	{
+		$reply['status'] ='ok';
+		$userinfo['username'] = $currentUserObj->getUsername(); ;
+		$userinfo['password'] = $currentUserObj->getPassword() ;
+		$userinfo['email'] = $currentUserObj->getEmail() ;
+		$userinfo['dob'] = $currentUserObj->getDob() ; 
+	}
+	else 
+	{
+		$errors['msg'][] ='Database error';
+	}
 	
-	$userinfo['username'] = $currentUserObj->getUsername(); ;
-	$userinfo['password'] = $currentUserObj->getPassword() ;
-	$userinfo['email'] = $currentUserObj->getEmail() ;
-	$userinfo['dob'] = $currentUserObj->getDob() ; 
 
 	// ------------------------------------------------
 	// Send reply 
 	// ------------------------------------------------
 	leave:
+	$reply['errors'] = $errors;
+	$reply['userinfo'] = $userinfo;
 	print json_encode($reply);
 ?>
