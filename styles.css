@@ -120,6 +120,11 @@ footer p{
 	background-color : #f6f6f6;
 }
 
+.text-error{
+	border: 1px solid #dd4b3b;
+	background-color : #dddddd;
+}
+
 .date{
 	height: 24px;
 	font-family:"Roboto", sans-serif;
