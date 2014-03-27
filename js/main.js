@@ -158,12 +158,31 @@ function signupFormSubmit(){
 
 //ToDo Page functions ///////////////////////////////////////////////////
 
+function incrementTodo(todoId){
+	console.log("increment :"+todoId);
+	todoPageBuilder();
+}
+
+function decrementTodo(todoId){
+	console.log("decrement :"+todoId);	
+	todoPageBuilder();
+}
+
+function deleteTodo(todoId){
+	console.log("delete :"+todoId);
+	todoPageBuilder();
+}
+
+
 function constructTodo(i,todo){
 	var completedClass = (todo["completedHrs"] == todo["totalHrs"])? "completed" : "";
 	var completePercent = todo["completedHrs"] *100 /todo["totalHrs"];
+	var canIncrement = (completePercent == 100)? "disabled":"";
+	var canDecrement = (completePercent == 0)? "disabled":"";
 	var importantClass = (todo["important"])? "important" : "";
 	var returnString = [
-		"<div id = \"todo-"+ i +"\" class=\"todo-entry "+completedClass+" "+importantClass+"\">",
+		"<div id = \"todo-"+ i +"\" class=\"todo-entry "+completedClass+"",
+			""+importantClass+"\" data-todo-id = "+todo['todoId']+" data-todo-no = "+i+">",
 			"<div class=\"todo-name\">",
 				""+ todo['todoName'] + "",
 			"</div>",
@@ -173,9 +192,17 @@ function constructTodo(i,todo){
 			"<div class=\"progressbar\">",
 			  "<div style=\" width : "+ completePercent +"%\"></div>",
 			"</div>",
+			"<div class=\"right todo-modifiers\">",
+				"<input class = \"todo-button increment-button "+canIncrement+"\" onclick = \"incrementTodo("+todo['todoId']+")\" ",
+					"type=\"button\" value=\"Increment\" "+canIncrement+"/>",
+				"<input class = \"todo-button "+canDecrement+"\" onclick = \"decrementTodo("+todo['todoId']+")\"",
+					"type=\"button\" style = \"background-image: url('images/dec.png');\" "+canDecrement+"/>",
+				"<input class = \"red-btn todo-button\" type=\"button\" onclick = \"deleteTodo("+todo['todoId']+")\"",
+					"style = \"background-image: url('images/del.png');\" />",
+			"</div>",
 			"<div class=\"clear\"></div>",
 		"</div>",
-		"<hr/>"
+		"<hr/>"		
 	];
 	return returnString.join(" ");
 }
@@ -191,9 +218,10 @@ function todoPageBuilder(){
 			if (json["status"] =='ok'){
 				var todos = json['todos'];
 				$('#todo-list').html("");
+
 				jQuery.each( todos, function( i, todo ) {
 					//console.log(JSON.stringify(todo));
-					$(constructTodo(i,todo)).appendTo( "#todo-list" )
+					$(constructTodo(i,todo)).appendTo( "#todo-list" );
 				});
 			}
 			else
