@@ -1,68 +1,70 @@
 <?php
 	/* ------------------------------------------------
-	 login.php: 
+	 userRead.php: 
 
-		login to the application if valid credentials 
-		are supplied, otherwise the user is logged out.
-
-		$_SESSION['is_logged_in']=="true" on success
-		$_SESSION['is_logged_in']=="false" on failure
+		read user data of the current user for
+		displaying in the profile page.
 
 	Parameters: 
 
 		username - required, non-empty string, the users user name
 		password - required, non-empty string, the users password
+		email - required, non-empty string, the users email
+		dob - required, non-empty string, the users date of birth
 
 	Returns: 
-		{ status: "ok" } on success
-		{ status: "<error messages>" } on failure
-	
+		{ status: "ok" ,userinfo: "{username: "<username from db>" , password: "<password from db>" , email: "<email from db>" , dob: "<dob from db>"}"}} on success
+		
+		
+
 	------------------------------------------------ */
 
-	session_save_path("sess");
-	session_start(); 
+	require 'config.inc';
+	require 'Model.php';
+	
 	header('Content-Type: application/json');
 
 	// ------------------------------------------------
 	// Default reply
 	// ------------------------------------------------
 	$reply=array();
-	$reply['status']='ok';
+	$userinfo = array();
+
+	$currentUserObj = new user();
 
 	// ------------------------------------------------
 	// Default resulting state
 	// ------------------------------------------------
-	$_SESSION["is_logged_in"]="false";
+	$reply['status'] ='ok';
+
+	$userinfo['username'] = "" ;
+	$userinfo['password'] = "" ;
+	$userinfo['email'] = "" ;
+	$userinfo['dob'] = "" ;
+
+	// ------------------------------------------------
+	// retreive assessed data
+	// ------------------------------------------------
+
+	if(!isset($_REQUEST['data']) || !isset($_REQUEST['requestType']) )
+		goto leave;
 
 	// ------------------------------------------------
 	// Check parameters
 	// ------------------------------------------------
-	if(empty($_REQUEST['user'])){
-		$reply['status']='user must be supplied';
-	}
-	if(empty($_REQUEST['password'])){
-		// Below is conceptually wrong! You should not return HTML.
-		// These scripts should only return data. It is not concerned
-		// with user interface.
-		$reply['status'] = $reply['status'] . '<br/> password must be supplied';
-	}
-
-	if($reply['status']!='ok'){
-		goto leave;
-	}
+	
 
 	// ------------------------------------------------
 	// Perform operation 
 	// ------------------------------------------------
 
 	// Check the database...SELECT FROM ... $1 ... $2
-	if($_REQUEST['user']!="arnold" || $_REQUEST['password']!="spiderman"){
-		$reply['status']="invalid login";
-		$_SESSION["is_logged_in"]="true";
-		goto leave;
-	} else {
-		$_SESSION["is_logged_in"]="true";
-	}
+	$currentUserObj = $GLOBALS['userobj']->getUserObj ($_SESSION['dbconn'], $_SESSION['Username'])
+	
+	$userinfo['username'] = $currentUserObj->getUsername(); ;
+	$userinfo['password'] = $currentUserObj->getPassword() ;
+	$userinfo['email'] = $currentUserObj->getEmail() ;
+	$userinfo['dob'] = $currentUserObj->getDob() ; 
 
 	// ------------------------------------------------
 	// Send reply 

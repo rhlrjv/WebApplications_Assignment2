@@ -15,9 +15,11 @@
 		dob - required, non-empty string, the users date of birth
 
 	Returns: 
-		{ status: "ok" } on success
-		{ status: "<error messages>" } on failure
-	
+		{ status: "ok" ,errors: "<unimportant>"} on success
+		{ status: "error" , errors: "{msg: "<error msg array>" , username: "<error in user?>" , password: "<password Error?>" , reenterpassword: "<reenterpassword Error?>" , email: "<email Error?>" , dob: "<dob Error?>"}"} on failure
+			error message codes = true/false 
+				any true value -> field marked as error field in front end
+
 	------------------------------------------------ */
 
 	require 'config.inc';
@@ -29,7 +31,7 @@
 	// Default reply
 	// ------------------------------------------------
 	$reply=array();
-	$reply = array();
+	$errors = array();
 
 	// ------------------------------------------------
 	// Default resulting state
