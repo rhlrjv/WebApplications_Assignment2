@@ -173,6 +173,11 @@ function deleteTodo(todoId){
 	todoPageBuilder();
 }
 
+function editTodo(index, todoId, totalHours, completedHours, important){
+	console.log("edit : "+index+ "," + todoId+ "," + completedHours+ "," + totalHours+ "," + important);
+	//console.log($("#todo-"+index+" .todo-name").text());
+}
+
 
 function constructTodo(i,todo){
 	var completedClass = (todo["completedHrs"] == todo["totalHrs"])? "completed" : "";
@@ -183,7 +188,8 @@ function constructTodo(i,todo){
 	var returnString = [
 		"<div id = \"todo-"+ i +"\" class=\"todo-entry "+completedClass+"",
 			""+importantClass+"\" data-todo-id = "+todo['todoId']+" data-todo-no = "+i+">",
-			"<div class=\"todo-name\">",
+			"<div class=\"todo-name\"   onclick = \"editTodo("+i+","+ todo["todoId"]+",",
+				""+ todo["totalHrs"]+","+ todo["completedHrs"]+","+ todo["important"] +")\" >",
 				""+ todo['todoName'] + "",
 			"</div>",
 			"<div class = \"completion\">",
@@ -196,7 +202,7 @@ function constructTodo(i,todo){
 				"<input class = \"todo-button increment-button "+canIncrement+"\" onclick = \"incrementTodo("+todo['todoId']+")\" ",
 					"type=\"button\" value=\"Increment\" "+canIncrement+"/>",
 				"<input class = \"todo-button "+canDecrement+"\" onclick = \"decrementTodo("+todo['todoId']+")\"",
-					"type=\"button\" style = \"background-image: url('images/dec.png');\" "+canDecrement+"/>",
+					"type=\"button\" style = \"background-image: url('images/dec.png');\""+canDecrement+"/>",
 				"<input class = \"red-btn todo-button\" type=\"button\" onclick = \"deleteTodo("+todo['todoId']+")\"",
 					"style = \"background-image: url('images/del.png');\" />",
 			"</div>",
@@ -283,3 +289,6 @@ $(function(){
 });
 
 
+function hello(){
+	alert("test");
+}

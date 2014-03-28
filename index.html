@@ -151,7 +151,32 @@
 						<hr/>
 						<div id="todo-list">
 						</div>
-						<hr/>
+						<div>
+							<div id="todo-0" class="todo-entry" data-todo-id="0" data-todo-no="0"> 
+								<form id="inline-edit-0" data-todo-id="0" data-todo-no="0">
+									<input class="text-entry todo-inline inline-name" placeholder = "Todo Name" 
+										value = "todo name" name="TodoName" type="text"/>
+										<span>Completed : </span>
+									<input class="text-entry  todo-inline hours-entry" 
+										value = "5" name="TodoHoursCompleted" type="number"/>
+										<span>Hrs out of</span>
+									<input class="text-entry  todo-inline hours-entry" 
+										value = "20" name="TodoHours" type="number"/>
+										<span>Hrs</span>
+									<!-- <input class="chkbox"  name="TodoImportant" type="checkbox" />	 -->
+									<div class="slideThree inline">	
+										<input type="checkbox" value="None" id="slideThree" name="TodoImportant" />
+										<label for="slideThree"></label>
+									</div>
+
+									<input class = "todo-button inline inline-btn right" value="" type="submit" style = "background-image: url('images/inc.png');"name="editTodoSubmit"/>
+
+																	
+								</form>
+								<div class="clear"></div>
+							</div>
+							<hr/>
+						</div>
 					</div>
 				</div>
 			</div>
