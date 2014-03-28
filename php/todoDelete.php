@@ -63,27 +63,25 @@
 	// ------------------------------------------------
 	// Check parameters
 	// ------------------------------------------------
-
+	if(!$GLOBALS['taskobj']->checkIdExists($_SESSION['dbconn'], $requestId, $requestUsername))
+	{
+		$errors['msg'][] ='Task ID changed maliciously';
+		$errors['id'] = true;
+		goto leave;
+	}
 
 	// ------------------------------------------------
 	// Perform operation 
 	// ------------------------------------------------
 
 	// Check the database...SELECT FROM ... $1 ... $2
-	if($GLOBALS['taskobj']->checkIdExists($_SESSION['dbconn'], $requestTodoID, $requestUsername))
+	if($GLOBALS['taskobj']->deletetodo ($_SESSION['dbconn'], $requestId))
 	{
-		if($GLOBALS['taskobj']->deletetodo ($_SESSION['dbconn'], $requestTodoID))
-		{
-			$reply['status'] ='ok';
-		}
-		else
-			$errors['msg'][] ='Error deleting task';
-	} 
-	else 
-	{
-		$errors['id'] = true ;
-		$errors['msg'][] ='Task ID has been changed maliciously';
+		$reply['status'] ='ok';
 	}
+	else
+		$errors['msg'][] ='Error deleting task';
+	} 
 
 	// ------------------------------------------------
 	// Send reply 
