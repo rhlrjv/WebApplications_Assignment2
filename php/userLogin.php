@@ -1,6 +1,6 @@
 <?php
 	/* ------------------------------------------------
-	 login.php: 
+	 userLogin.php: 
 
 		login to the application if valid credentials 
 		are supplied, otherwise the user is logged out.
@@ -30,7 +30,7 @@
 	// ------------------------------------------------
 	// Default reply
 	// ------------------------------------------------
-	$reply=array();
+	$reply = array();
 	$errors = array();
 
 	// ------------------------------------------------

@@ -1,15 +1,16 @@
 <?php
 	/* ------------------------------------------------
-	 getloginState.php: 
+	 userLogout.php: 
 
-		returns if the application is looged in or not
+		logout to the application if valid credentials 
+		are supplied, otherwise the user is logged out.
 
 	Parameters: 
 		
 		RequestType - required, non-empty string, not used in this case
 
 	Returns: 
-		{ status: "ok" statte: "logged_in"/"logged_out"} on success
+		{ status: "ok" } on success
 		{ status: "error"} of failure
 	
 	------------------------------------------------ */
@@ -41,10 +42,8 @@
 	// Perform operation 
 	// ------------------------------------------------
 
-	if (isLoggedIn())
-		$reply['state'] ='logged_in';
-	else 
-		$reply['state'] ='logged_out';
+	clearSession();
+	setState("logged_out");
 	$reply['status']= 'ok';
 	
 	// ------------------------------------------------

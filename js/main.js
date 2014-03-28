@@ -28,6 +28,19 @@ function setUserLoginState(){
 	});
 }
 
+function userlogout(){
+	$.ajax({
+		type: "POST",
+		url: "php/userLogout.php",
+		dataType: 'json',
+		success: function(json)
+		{
+			console.log(JSON.stringify(json)); // show response from the php script.
+		}
+	});
+	setUserLoginState();
+}
+
 //page Change //////////////////////////////////////////////////////
 
 function accessHomePage() {
