@@ -1,5 +1,69 @@
-//variables ////////////////////////////////////////////////////////
+//Variables ////////////////////////////////////////////////////////
+var isEditing =false;
 
+
+//html Generators //////////////////////////////////////////////////
+function constructEditTodo(todoID, todoName, completedHrs, TotalHrs, imp){
+	var returnString = [
+		"<form id=\"inline-edit-0\" data-todo-id=\"0\" data-todo-no=\"0\">",
+			"<input class=\"text-entry todo-inline inline-name\" placeholder = \"Todo Name\" ",
+				"value = \"todo name\" name=\"TodoName\" type=\"text\"/>",
+				"<span>Completed : </span>",
+			"<input class=\"text-entry  todo-inline hours-entry\" ",
+				"value = \"5\" name=\"TodoHoursCompleted\" type=\"number\"/>",
+				"<span>Hrs out of</span>",
+			"<input class=\"text-entry  todo-inline hours-entry\" ",
+				"value = \"20\" name=\"TodoHours\" type=\"number\"/>",
+				"<span>Hrs</span>",
+			"<div class=\"slideThree inline\">	",
+				"<input type=\"checkbox\" value=\"None\" id=\"slideThree\" name=\"TodoImportant\" />",
+				"<label for=\"slideThree\"></label>",
+			"</div>",
+			"<div class = \"todo-button inline inline-btn red-btn right\" ",
+				"style = \"background-image: url('images/cancel.png'); height: 23px; width: 23px;\" ",
+				"onclick = \"todoPageBuilder()\">",
+			"</div>	",
+			"<input class = \"todo-button inline inline-btn right\" value=\"\" type=\"submit\" ",
+			"style = \"background-image: url('images/tick.png');\"name=\"editTodoSubmit\"/>		",															
+		"</form>",
+		"<div class=\"clear\"></div>",
+	]
+	return returnString.join(" ");
+}
+
+function constructTodo(i,todo){
+	var completedClass = (todo["completedHrs"] == todo["totalHrs"])? "completed" : "";
+	var completePercent = todo["completedHrs"] *100 /todo["totalHrs"];
+	var canIncrement = (completePercent == 100)? "disabled":"";
+	var canDecrement = (completePercent == 0)? "disabled":"";
+	var importantClass = (todo["important"])? "important" : "";
+	var returnString = [
+		"<div id = \"todo-"+ i +"\" class=\"todo-entry "+completedClass+"",
+			""+importantClass+"\" data-todo-id = "+todo['todoId']+" data-todo-no = "+i+">",
+			"<div class=\"todo-name\"   onclick = \"editTodo("+i+","+ todo["todoId"]+",",
+				""+ todo["totalHrs"]+","+ todo["completedHrs"]+","+ todo["important"] +")\" >",
+				""+ todo['todoName'] + "",
+			"</div>",
+			"<div class = \"completion\">",
+				""+ todo['completedHrs'] +"/"+ todo['totalHrs'] +" hours",
+			"</div>",
+			"<div class=\"progressbar\">",
+			  "<div style=\" width : "+ completePercent +"%\"></div>",
+			"</div>",
+			"<div class=\"right todo-modifiers\">",
+				"<input class = \"todo-button increment-button "+canIncrement+"\" onclick = \"incrementTodo("+todo['todoId']+")\" ",
+					"type=\"button\" value=\"Increment\" "+canIncrement+"/>",
+				"<input class = \"todo-button "+canDecrement+"\" onclick = \"decrementTodo("+todo['todoId']+")\"",
+					"type=\"button\" style = \"background-image: url('images/dec.png');\""+canDecrement+"/>",
+				"<input class = \"red-btn todo-button\" type=\"button\" onclick = \"deleteTodo("+todo['todoId']+")\"",
+					"style = \"background-image: url('images/del.png');\" />",
+			"</div>",
+			"<div class=\"clear\"></div>",
+		"</div>",
+		"<hr/>"		
+	];
+	return returnString.join(" ");
+}
 
 //check application state //////////////////////////////////////////
 function setUserLoginState(){
@@ -186,44 +250,26 @@ function deleteTodo(todoId){
 	todoPageBuilder();
 }
 
-function editTodo(index, todoId, totalHours, completedHours, important){
+function showEditBar(index, todoId, totalHours, completedHours, important , todoName){
 	console.log("edit : "+index+ "," + todoId+ "," + completedHours+ "," + totalHours+ "," + important);
-	//console.log($("#todo-"+index+" .todo-name").text());
+	$("#todo-"+index).html(
+		constructEditTodo( todoId, todoName, completedHours, totalHours, important , todoName)
+	);
+	isEditing = true;
 }
-
-
-function constructTodo(i,todo){
-	var completedClass = (todo["completedHrs"] == todo["totalHrs"])? "completed" : "";
-	var completePercent = todo["completedHrs"] *100 /todo["totalHrs"];
-	var canIncrement = (completePercent == 100)? "disabled":"";
-	var canDecrement = (completePercent == 0)? "disabled":"";
-	var importantClass = (todo["important"])? "important" : "";
-	var returnString = [
-		"<div id = \"todo-"+ i +"\" class=\"todo-entry "+completedClass+"",
-			""+importantClass+"\" data-todo-id = "+todo['todoId']+" data-todo-no = "+i+">",
-			"<div class=\"todo-name\"   onclick = \"editTodo("+i+","+ todo["todoId"]+",",
-				""+ todo["totalHrs"]+","+ todo["completedHrs"]+","+ todo["important"] +")\" >",
-				""+ todo['todoName'] + "",
-			"</div>",
-			"<div class = \"completion\">",
-				""+ todo['completedHrs'] +"/"+ todo['totalHrs'] +" hours",
-			"</div>",
-			"<div class=\"progressbar\">",
-			  "<div style=\" width : "+ completePercent +"%\"></div>",
-			"</div>",
-			"<div class=\"right todo-modifiers\">",
-				"<input class = \"todo-button increment-button "+canIncrement+"\" onclick = \"incrementTodo("+todo['todoId']+")\" ",
-					"type=\"button\" value=\"Increment\" "+canIncrement+"/>",
-				"<input class = \"todo-button "+canDecrement+"\" onclick = \"decrementTodo("+todo['todoId']+")\"",
-					"type=\"button\" style = \"background-image: url('images/dec.png');\""+canDecrement+"/>",
-				"<input class = \"red-btn todo-button\" type=\"button\" onclick = \"deleteTodo("+todo['todoId']+")\"",
-					"style = \"background-image: url('images/del.png');\" />",
-			"</div>",
-			"<div class=\"clear\"></div>",
-		"</div>",
-		"<hr/>"		
-	];
-	return returnString.join(" ");
+function editTodo(index, todoId, totalHours, completedHours, important){
+	
+	//console.log($("#todo-"+index+" .todo-name").text());
+	var todoName = $("#todo-"+index+" .todo-name").text();
+	if (isEditing){
+		todoPageBuilder();
+		// $( document ).ajaxComplete(function() {
+		// 	showEditBar(index, todoId, totalHours, completedHours, important , todoName);
+		// });
+	}
+	else {
+		showEditBar(index, todoId, totalHours, completedHours, important , todoName);
+	}
 }
 
 function todoPageBuilder(){
@@ -242,6 +288,7 @@ function todoPageBuilder(){
 					//console.log(JSON.stringify(todo));
 					$(constructTodo(i,todo)).appendTo( "#todo-list" );
 				});
+				isEditing = false;
 			}
 			else
 				;//error
