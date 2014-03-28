@@ -17,7 +17,7 @@
 
 	Returns: 
 		{ status: "ok" ,errors: "<unimportant>"} on success
-		{ status: "error" , errors: "{msg: "<error msg array>" , username: "<error in user?>" , id: "<id Error?>" , taskname: "<taskname Error?>" , totalhrs: "<total hrs Error?>" , completedhrs: "<completed hrs Error?>", imp: "<imp Error?>"}"}"} on failure
+		{ status: "error" , errors: "{msg: "<error msg array>" , username: "<error in user?>" , taskname: "<taskname Error?>" , totalhrs: "<total hrs Error?>" , completedhrs: "<completed hrs Error?>", imp: "<imp Error?>"}"}"} on failure
 			error message codes = true/false 
 				any true value -> field marked as error field in front end
 
@@ -41,7 +41,6 @@
 
 	$errors['msg'] = array();
 	$errors['username'] = false ;//no error
-	$errors['id'] = false ;//no error
 	$errors['taskname'] = false ;//no error
 	$errors['totalhrs'] = false ;//no error
 	$errors['completedhrs'] = false ;//no error
@@ -57,8 +56,7 @@
 	$data = json_decode($_REQUEST['data'],true);
 	$requestType = $_REQUEST["requestType"];
 	$requestUsername = $_SESSION['Username'];
-	$requestId = $data["TodoName"];
-	$requestTaskname = $data["reEnterPassword"];
+	$requestTaskname = $data["TodoName"];
 	$requestTotalHrs = $data["TodoHours"];
 	$requestCompletedhrs = $data["TodoHoursCompleted"];
 
@@ -84,8 +82,7 @@
 	if (preg_match('/[\'^£$%&*()}{@#~?><>,|=+¬-]/', $requestTaskname))
 	{
 	    $errors['msg'][] ='Taskname cannot have special characters';
-	    $errors['username'] = true;
-	    $errors['reenterpassword'] = true;
+	    $errors['taskname'] = true;
 	}
 
 	if($requestTotalHrs < $requestCompletedhrs)
