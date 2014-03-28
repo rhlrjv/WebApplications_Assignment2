@@ -80,6 +80,7 @@
 		$reply['status'] ='ok';
 	}
 	else
+	{
 		$errors['msg'][] ='Error deleting task';
 	} 
 
