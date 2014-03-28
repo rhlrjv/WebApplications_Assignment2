@@ -14,14 +14,21 @@
 			$result = pg_execute($dbconn, "user_query", array($argUsername));
 			if($result)
 			{
-				$row = pg_fetch_row($result);
-				//$profileUserObj = new task();
-				$this->username = $row[0];
-				$this->password = $row[1];
-				$this->email = $row[2];
-				$this->dob = $row[3];
-				
-				return $this;
+				$rows = pg_num_rows($result); 
+				if($rows)
+				{
+					$row = pg_fetch_row($result);
+					
+
+					$this->username = $row[0];
+					$this->password = $row[1];
+					$this->email = $row[2];
+					$this->dob = $row[3];
+					
+					return $this;
+				}
+				else
+					return false;
 			}
 		}
 		

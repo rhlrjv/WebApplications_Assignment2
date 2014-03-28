@@ -1,23 +1,18 @@
 <?php
 	/* ------------------------------------------------
-	 todoDelete.php: 
+	 todoUpdateRate.php: 
 
-		delete a todo with an id which is unique
+		update rate of todo with an id which is unique
 		for a specific username,
 		otherwise the user is requested to refill/retry.
 
 	Parameters: 
 
-		username - required, non-empty string, the users user name
-		id - required, non-empty string, the unique task id across users
-		taskname - required, non-empty string, name of the task
-		totalhrs - required, non-empty string, total hours for completion
-		completedhrs - required, non-empty string, # of hours completed
-		imp - required, non-empty string, is a task important
-
+		todorate - required, non-empty string, the rate of todo
+		
 	Returns: 
 		{ status: "ok" ,errors: "<unimportant>"} on success
-		{ status: "error" , errors: "{msg: "<error msg array>" , username: "<error in user?>" , id: "<id Error?>" , taskname: "<taskname Error?>" , totalhrs: "<total hrs Error?>" , completedhrs: "<completed hrs Error?>", imp: "<imp Error?>"}"}"} on failure
+		{ status: "error" , errors: "{msg: "<error msg array>" , todorate: "<error in rate?>"}"}"} on failure
 			error message codes = true/false 
 				any true value -> field marked as error field in front end
 
@@ -40,12 +35,7 @@
 	$reply['status'] ='error';
 
 	$errors['msg'] = array();
-	$errors['username'] = false ;//no error
-	$errors['id'] = false ;//no error
-	$errors['taskname'] = false ;//no error
-	$errors['totalhrs'] = false ;//no error
-	$errors['completedhrs'] = false ;//no error
-	$errors['imp'] = false ;//no error
+	$errors['todorate'] = false ;//no error
 
 	// ------------------------------------------------
 	// retreive assessed data
@@ -56,17 +46,15 @@
 
 	$data = json_decode($_REQUEST['data'],true);
 	$requestType = $_REQUEST["requestType"];
-	$requestUsername = $_SESSION['Username'];
-	$requestId = $data["TodoID"];
-
+	$requestTodorate = $_SESSION['TodoRate'];
 
 	// ------------------------------------------------
 	// Check parameters
 	// ------------------------------------------------
-	if(!$GLOBALS['taskobj']->checkIdExists($_SESSION['dbconn'], $requestId, $requestUsername))
+	if($requestTodorate < 0 || $requestTodorate > 24)
 	{
-		$errors['msg'][] ='Task ID changed maliciously';
-		$errors['id'] = true;
+		$errors['msg'][] ='Invalid todo rate';
+		$errors['todorate'] = true;
 		goto leave;
 	}
 
@@ -74,15 +62,8 @@
 	// Perform operation 
 	// ------------------------------------------------
 
-	// Check the database...SELECT FROM ... $1 ... $2
-	if($GLOBALS['taskobj']->deletetodo ($_SESSION['dbconn'], $requestId))
-	{
-		$reply['status'] ='ok';
-	}
-	else
-	{
-		$errors['msg'][] ='Error deleting task';
-	} 
+	$_SESSION['TodoRate'] = $requestTodorate;
+	$reply['status'] ='ok';
 
 	// ------------------------------------------------
 	// Send reply 
