@@ -1,19 +1,13 @@
 <?php
 	/* ------------------------------------------------
-	 todoDelete.php: 
+	 todoDecrement.php: 
 
-		delete a todo with an id which is unique
-		for a specific username,
-		otherwise the user is requested to refill/retry.
+		decrement the completed hours of a todo 
 
 	Parameters: 
 
 		username - required, non-empty string, the users user name
 		id - required, non-empty string, the unique task id across users
-		taskname - required, non-empty string, name of the task
-		totalhrs - required, non-empty string, total hours for completion
-		completedhrs - required, non-empty string, # of hours completed
-		imp - required, non-empty string, is a task important
 
 	Returns: 
 		{ status: "ok" ,errors: "<unimportant>"} on success
