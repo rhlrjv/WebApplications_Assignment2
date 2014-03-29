@@ -40,7 +40,6 @@
 	$reply['status'] ='error';
 
 	$errors['msg'] = array();
-	$errors['username'] = false ;//no error
 	$errors['id'] = false ;//no error
 	$errors['taskname'] = false ;//no error
 	$errors['totalhrs'] = false ;//no error
@@ -55,6 +54,7 @@
 		goto leave;
 
 	$data = json_decode($_REQUEST['data'],true);
+
 	$requestType = $_REQUEST["requestType"];
 	$requestUsername = $_SESSION['Username'];
 	$requestTaskname = $data["TodoName"];
@@ -68,9 +68,9 @@
 		$requestCompletedhrs = $data["TodoHoursCompleted"];
 
 	if(isset($data["TodoImportant"]))
-		$requestImp = true;
+		$requestImp = 1;
 	else
-		$requestImp = false;
+		$requestImp = 0;
 
 	// ------------------------------------------------
 	// Check parameters

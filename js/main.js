@@ -3,20 +3,22 @@ var isEditing =false;
 
 
 //html Generators //////////////////////////////////////////////////
-function constructEditTodo(todoID, todoName, completedHrs, TotalHrs, imp){
+function constructEditTodo(todoID, todoName, completedHrs, totalHrs, imp){
+	var impChecked = (imp)? "checked": "";
 	var returnString = [
-		"<form id=\"inline-edit-0\" data-todo-id=\"0\" data-todo-no=\"0\">",
+		"<form id=\"inline-edit-"+todoID+"\" data-todo-id=\""+todoID+"\">",
+			"<input type=\"hidden\" name=\"TodoID\" value=\""+todoID+"\"/>",
 			"<input class=\"text-entry todo-inline inline-name\" placeholder = \"Todo Name\" ",
-				"value = \"todo name\" name=\"TodoName\" type=\"text\"/>",
+				"value = \""+todoName+"\" name=\"TodoName\" type=\"text\"/>",
 				"<span>Completed : </span>",
 			"<input class=\"text-entry  todo-inline hours-entry\" ",
-				"value = \"5\" name=\"TodoHoursCompleted\" type=\"number\"/>",
+				"value = \""+completedHrs+"\" name=\"TodoHoursCompleted\" type=\"number\"/>",
 				"<span>Hrs out of</span>",
 			"<input class=\"text-entry  todo-inline hours-entry\" ",
-				"value = \"20\" name=\"TodoHours\" type=\"number\"/>",
+				"value = \""+totalHrs+"\" name=\"TodoHours\" type=\"number\"/>",
 				"<span>Hrs</span>",
 			"<div class=\"slideThree inline\">	",
-				"<input type=\"checkbox\" value=\"None\" id=\"slideThree\" name=\"TodoImportant\" />",
+				"<input type=\"checkbox\" value=\"None\" id=\"slideThree\" name=\"TodoImportant\" "+impChecked+"/>",
 				"<label for=\"slideThree\"></label>",
 			"</div>",
 			"<div class = \"todo-button inline inline-btn red-btn right\" ",
@@ -39,8 +41,8 @@ function constructTodo(i,todo){
 	var importantClass = (todo["important"])? "important" : "";
 	var returnString = [
 		"<div id = \"todo-"+ i +"\" class=\"todo-entry "+completedClass+"",
-			""+importantClass+"\" data-todo-id = "+todo['todoId']+" data-todo-no = "+i+">",
-			"<div class=\"todo-name\"   onclick = \"editTodo("+i+","+ todo["todoId"]+",",
+			""+importantClass+"\" data-todo-id = "+todo['todoID']+" data-todo-no = "+i+">",
+			"<div class=\"todo-name\"   onclick = \"editTodo("+i+","+ todo["todoID"]+",",
 				""+ todo["totalHrs"]+","+ todo["completedHrs"]+","+ todo["important"] +")\" >",
 				""+ todo['todoName'] + "",
 			"</div>",
@@ -51,11 +53,11 @@ function constructTodo(i,todo){
 			  "<div style=\" width : "+ completePercent +"%\"></div>",
 			"</div>",
 			"<div class=\"right todo-modifiers\">",
-				"<input class = \"todo-button increment-button "+canIncrement+"\" onclick = \"incrementTodo("+todo['todoId']+")\" ",
+				"<input class = \"todo-button increment-button "+canIncrement+"\" onclick = \"incrementTodo("+todo['todoID']+")\" ",
 					"type=\"button\" value=\"Increment\" "+canIncrement+"/>",
-				"<input class = \"todo-button "+canDecrement+"\" onclick = \"decrementTodo("+todo['todoId']+")\"",
+				"<input class = \"todo-button "+canDecrement+"\" onclick = \"decrementTodo("+todo['todoID']+")\"",
 					"type=\"button\" style = \"background-image: url('images/dec.png');\""+canDecrement+"/>",
-				"<input class = \"red-btn todo-button\" type=\"button\" onclick = \"deleteTodo("+todo['todoId']+")\"",
+				"<input class = \"red-btn todo-button\" type=\"button\" onclick = \"deleteTodo("+todo['todoID']+")\"",
 					"style = \"background-image: url('images/del.png');\" />",
 			"</div>",
 			"<div class=\"clear\"></div>",
@@ -233,6 +235,49 @@ function signupFormSubmit(){
 	});
 }
 
+function editTodoSubmit(todoID){
+	clearAllMarkedInputFields();
+	//define data to send
+	var sendData = {
+		requestType: "editTodo",
+		data : JSON.stringify($("#inline-edit-"+todoID).serializeObject())
+	};
+
+	//ajax call
+	$.ajax({
+		type: "POST",
+		url: "php/todoUpdate.php",
+		dataType: 'json',
+		data: sendData, 
+		success: function(json)
+		{
+			console.log(JSON.stringify(json)); // show response from the php script.
+			if (json["status"] =='ok'){
+				todoPageBuilder();
+			}
+			else
+			{
+				error = json['errors'];
+
+				if (error['msg'].length > 0)
+					setTodoErrorMsg(error['msg'].join("<br/>"));
+				else
+					setTodoErrorMsg("Undefined Error. Pls contact system admin");
+
+				if (error['taskname'])
+					$("#inline-edit-"+todoID+" input[name=TodoName]").addClass("text-error");
+				if (error['totalhrs'])
+					$("#inline-edit-"+todoID+" input[name=TodoHours]").addClass("text-error");
+				if (error['completedhrs'])
+					$("#inline-edit-"+todoID+" input[name=TodoHoursCompleted]").addClass("text-error");
+			}
+		},
+		error: function(data,status){
+			alert("ERRROR : "+status);
+		}
+	});
+}
+
 //ToDo Page functions ///////////////////////////////////////////////////
 
 function incrementTodo(todoId){
@@ -252,23 +297,22 @@ function deleteTodo(todoId){
 
 function showEditBar(index, todoId, totalHours, completedHours, important , todoName){
 	console.log("edit : "+index+ "," + todoId+ "," + completedHours+ "," + totalHours+ "," + important);
-	$("#todo-"+index).html(
-		constructEditTodo( todoId, todoName, completedHours, totalHours, important , todoName)
-	);
+	$("#todo-"+index).html(constructEditTodo( todoId, todoName, completedHours, totalHours, important , todoName));
 	isEditing = true;
 }
 function editTodo(index, todoId, totalHours, completedHours, important){
 	
 	//console.log($("#todo-"+index+" .todo-name").text());
-	var todoName = $("#todo-"+index+" .todo-name").text();
+	var todoName = $.trim($("#todo-"+index+" .todo-name").text());
 	if (isEditing){
 		todoPageBuilder();
-		// $( document ).ajaxComplete(function() {
-		// 	showEditBar(index, todoId, totalHours, completedHours, important , todoName);
-		// });
 	}
 	else {
 		showEditBar(index, todoId, totalHours, completedHours, important , todoName);
+		$("#inline-edit-"+todoId).on( "submit", function( event ) {
+			event.preventDefault();
+			editTodoSubmit(todoId);
+		});
 	}
 }
 
@@ -279,8 +323,10 @@ function todoPageBuilder(){
 		dataType: 'json',
 		success: function(json)
 		{
-			console.log(JSON.stringify(json)); // show response from the php script.
+			//console.log(JSON.stringify(json)); // show response from the php script.
 			if (json["status"] =='ok'){
+				clearMsgs();
+				clearAllMarkedInputFields();
 				var todos = json['todos'];
 				$('#todo-list').html("");
 
