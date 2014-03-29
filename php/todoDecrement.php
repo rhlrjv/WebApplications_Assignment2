@@ -34,12 +34,7 @@
 	$reply['status'] ='error';
 
 	$errors['msg'] = array();
-	$errors['username'] = false ;//no error
 	$errors['id'] = false ;//no error
-	$errors['taskname'] = false ;//no error
-	$errors['totalhrs'] = false ;//no error
-	$errors['completedhrs'] = false ;//no error
-	$errors['imp'] = false ;//no error
 
 	// ------------------------------------------------
 	// retreive assessed data
@@ -69,13 +64,13 @@
 	// ------------------------------------------------
 
 	// Check the database...SELECT FROM ... $1 ... $2
-	if($GLOBALS['taskobj']->incrementCompletedHrs ($_SESSION['dbconn'], $requestId))
+	if($GLOBALS['taskobj']->decrementCompletedHrs ($_SESSION['dbconn'], $requestId))
 	{
 		$reply['status'] ='ok';
 	}
 	else
 	{
-		$errors['msg'][] ='Error incrementing completed hours';
+		$errors['msg'][] ='Error decrementing completed hours';
 	} 
 
 	// ------------------------------------------------

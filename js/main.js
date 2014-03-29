@@ -90,6 +90,9 @@ function setUserLoginState(){
 				$('.nav-lout').show();
 				accessHomePage();
 			}
+		},
+		error: function(data,status){
+			setFormErrorMsg("Error: "+status+". Pls contact system admin");
 		}
 	});
 }
@@ -102,6 +105,9 @@ function userlogout(){
 		success: function(json)
 		{
 			console.log(JSON.stringify(json)); // show response from the php script.
+		},
+		error: function(data,status){
+			setTodoErrorMsg("Error: "+status+". Pls contact system admin");
 		}
 	});
 	setUserLoginState();
@@ -184,6 +190,9 @@ function loginFormSubmit(){
 				if (error['password'])
 					$("#login-form input[name=Password]").addClass("text-error");
 			}
+		},
+		error: function(data,status){
+			setFormErrorMsg("Error: "+status+". Pls contact system admin");
 		}
 	});
 }
@@ -231,6 +240,9 @@ function signupFormSubmit(){
 				if (error['dob'])
 					$("#signup-form input[name=dob]").addClass("text-error");
 			}
+		},
+		error: function(data,status){
+			setFormErrorMsg("Error: "+status+". Pls contact system admin");
 		}
 	});
 }
@@ -273,7 +285,7 @@ function editTodoSubmit(todoID){
 			}
 		},
 		error: function(data,status){
-			alert("ERRROR : "+status);
+			setTodoErrorMsg("Error. Status: "+status+". Pls contact system admin");
 		}
 	});
 }
@@ -281,18 +293,102 @@ function editTodoSubmit(todoID){
 //ToDo Page functions ///////////////////////////////////////////////////
 
 function incrementTodo(todoId){
-	console.log("increment :"+todoId);
-	todoPageBuilder();
+	var sendData = {
+		requestType: "incrementTodo",
+		data: JSON.stringify({"TodoID" : todoId})
+	};
+
+	//ajax call
+	$.ajax({
+		//type: "POST",
+		url: "php/todoIncrement.php",
+		dataType: 'json',
+		data: sendData, 
+		success: function(json)
+		{
+			console.log(JSON.stringify(json)); // show response from the php script.
+			if (json["status"] =='ok'){
+				todoPageBuilder();
+			}
+			else
+			{
+				error = json['errors'];
+				if (error['msg'].length > 0)
+					setTodoErrorMsg(error['msg'].join("<br/>"));
+				else
+					setTodoErrorMsg("Undefined Error. Pls contact system admin");
+			}
+		},
+		error: function(data,status){
+			setTodoErrorMsg("Error: "+status+". Pls contact system admin");
+		}
+	});
 }
 
 function decrementTodo(todoId){
-	console.log("decrement :"+todoId);	
-	todoPageBuilder();
+	var sendData = {
+		requestType: "decrementTodo",
+		data: JSON.stringify({"TodoID" : todoId})
+	};
+
+	//ajax call
+	$.ajax({
+		//type: "POST",
+		url: "php/todoDecrement.php",
+		dataType: 'json',
+		data: sendData, 
+		success: function(json)
+		{
+			console.log(JSON.stringify(json)); // show response from the php script.
+			if (json["status"] =='ok'){
+				todoPageBuilder();
+			}
+			else
+			{
+				error = json['errors'];
+				if (error['msg'].length > 0)
+					setTodoErrorMsg(error['msg'].join("<br/>"));
+				else
+					setTodoErrorMsg("Undefined Error. Pls contact system admin");
+			}
+		},
+		error: function(data,status){
+			setTodoErrorMsg("Error: "+status+". Pls contact system admin");
+		}
+	});
 }
 
 function deleteTodo(todoId){
-	console.log("delete :"+todoId);
-	todoPageBuilder();
+	var sendData = {
+		requestType: "deleteTodo",
+		data: JSON.stringify({"TodoID" : todoId})
+	};
+
+	//ajax call
+	$.ajax({
+		//type: "POST",
+		url: "php/todoDelete.php",
+		dataType: 'json',
+		data: sendData, 
+		success: function(json)
+		{
+			console.log(JSON.stringify(json)); // show response from the php script.
+			if (json["status"] =='ok'){
+				todoPageBuilder();
+			}
+			else
+			{
+				error = json['errors'];
+				if (error['msg'].length > 0)
+					setTodoErrorMsg(error['msg'].join("<br/>"));
+				else
+					setTodoErrorMsg("Undefined Error. Pls contact system admin");
+			}
+		},
+		error: function(data,status){
+			setTodoErrorMsg("Error: "+status+". Pls contact system admin");
+		}
+	});
 }
 
 function showEditBar(index, todoId, totalHours, completedHours, important , todoName){
@@ -338,6 +434,9 @@ function todoPageBuilder(){
 			}
 			else
 				;//error
+		},
+		error: function(data,status){
+			setTodoErrorMsg("Error: "+status+". Pls contact system admin");
 		}
 	});
 }

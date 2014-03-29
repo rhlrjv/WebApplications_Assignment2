@@ -11,7 +11,7 @@
 
 	Returns: 
 		{ status: "ok" ,errors: "<unimportant>"} on success
-		{ status: "error" , errors: "{msg: "<error msg array>" , username: "<error in user?>" , id: "<id Error?>" , taskname: "<taskname Error?>" , totalhrs: "<total hrs Error?>" , completedhrs: "<completed hrs Error?>", imp: "<imp Error?>"}"}"} on failure
+		{ status: "error" , errors: "{msg: "<error msg array>" , id: "<id Error?>" , "}"}"} on failure
 			error message codes = true/false 
 				any true value -> field marked as error field in front end
 
@@ -34,12 +34,8 @@
 	$reply['status'] ='error';
 
 	$errors['msg'] = array();
-	$errors['username'] = false ;//no error
 	$errors['id'] = false ;//no error
-	$errors['taskname'] = false ;//no error
-	$errors['totalhrs'] = false ;//no error
-	$errors['completedhrs'] = false ;//no error
-	$errors['imp'] = false ;//no error
+
 
 	// ------------------------------------------------
 	// retreive assessed data
@@ -69,13 +65,13 @@
 	// ------------------------------------------------
 
 	// Check the database...SELECT FROM ... $1 ... $2
-	if($GLOBALS['taskobj']->decrementCompletedHrs ($_SESSION['dbconn'], $requestId))
+	if($GLOBALS['taskobj']->incrementCompletedHrs($_SESSION['dbconn'], $requestId))
 	{
 		$reply['status'] ='ok';
 	}
 	else
 	{
-		$errors['msg'][] ='Error decrementing completed hours';
+		$errors['msg'][] ='Error incrementing completed hours';
 	} 
 
 	// ------------------------------------------------

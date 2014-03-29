@@ -8,12 +8,7 @@
 
 	Parameters: 
 
-		username - required, non-empty string, the users user name
 		id - required, non-empty string, the unique task id across users
-		taskname - required, non-empty string, name of the task
-		totalhrs - required, non-empty string, total hours for completion
-		completedhrs - required, non-empty string, # of hours completed
-		imp - required, non-empty string, is a task important
 
 	Returns: 
 		{ status: "ok" ,errors: "<unimportant>"} on success
@@ -42,10 +37,6 @@
 	$errors['msg'] = array();
 	$errors['username'] = false ;//no error
 	$errors['id'] = false ;//no error
-	$errors['taskname'] = false ;//no error
-	$errors['totalhrs'] = false ;//no error
-	$errors['completedhrs'] = false ;//no error
-	$errors['imp'] = false ;//no error
 
 	// ------------------------------------------------
 	// retreive assessed data
