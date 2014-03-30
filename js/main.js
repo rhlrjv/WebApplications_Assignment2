@@ -67,6 +67,16 @@ function constructTodo(i,todo){
 	return returnString.join(" ");
 }
 
+function getSummaryStats(complete, total){
+	var returnString = [
+		"<span class=\"heading\">Total hours</span>"+total+"  hours 	<br>",
+		"<span class=\"heading\">Completed hours</span>"+complete+"  hours 	<br>",
+		"<span class=\"heading\">% Complete</span>"+Math.round((complete*100)/total) +" &#37; <br>",
+		"<div class=\"clear\"></div>"
+	];
+	return returnString.join(" ");
+}
+
 //check application state //////////////////////////////////////////
 function setUserLoginState(){
 	$.ajax({
@@ -193,7 +203,7 @@ function loginFormSubmit(){
 				if (error['msg'].length > 0)
 					setFormErrorMsg(error['msg'].join("<br/>"));
 				else
-					setFormErrorMsg("Undefined Error. Pls contact system admin");
+					setFormErrorMsg("Server Error. Pls contact system admin");
 
 				if (error['username'])
 					$("#login-form input[name=UserName]").addClass("text-error");
@@ -237,7 +247,7 @@ function signupFormSubmit(){
 				if (error['msg'].length > 0)
 					setFormErrorMsg(error['msg'].join("<br/>"));
 				else
-					setFormErrorMsg("Undefined Error. Pls contact system admin");
+					setFormErrorMsg("Server Error. Pls contact system admin");
 
 				if (error['username'])
 					$("#signup-form input[name=UserName]").addClass("text-error");
@@ -284,7 +294,7 @@ function editTodoSubmit(todoID){
 				if (error['msg'].length > 0)
 					setTodoErrorMsg(error['msg'].join("<br/>"));
 				else
-					setTodoErrorMsg("Undefined Error. Pls contact system admin");
+					setTodoErrorMsg("Server Error. Pls contact system admin");
 
 				if (error['taskname'])
 					$("#inline-edit-"+todoID+" input[name=TodoName]").addClass("text-error");
@@ -328,7 +338,7 @@ function addTodoSubmit(todoID){
 				if (error['msg'].length > 0)
 					setTodoErrorMsg(error['msg'].join("<br/>"));
 				else
-					setTodoErrorMsg("Undefined Error. Pls contact system admin");
+					setTodoErrorMsg("Server Error. Pls contact system admin");
 
 				if (error['taskname'])
 					$("#inline-add-todo-form input[name=TodoName]").addClass("text-error");
@@ -373,7 +383,7 @@ function profileFormSubmit(){
 				if (error['msg'].length > 0)
 					setFormErrorMsg(error['msg'].join("<br/>"));
 				else
-					setFormErrorMsg("Undefined Error. Pls contact system admin");
+					setFormErrorMsg("Server Error. Pls contact system admin");
 
 				if (error['username'])
 					$("#profile-form input[name=profile_UserName]").addClass("text-error");
@@ -385,6 +395,47 @@ function profileFormSubmit(){
 					$("#profile-form input[name=profile_email]").addClass("text-error");
 				if (error['dob'])
 					$("#profile-form input[name=profile_dob]").addClass("text-error");
+			}
+		},
+		error: function(data,status){
+			setTodoErrorMsg("Error. Status: "+status+". Pls contact system admin");
+		}
+	});
+}
+
+
+function updateTodoRate(){
+	clearAllMarkedInputFields();
+
+	//define data to send
+	var sendData = {
+		requestType: "updateTodo",
+		data : JSON.stringify({"TodoRate": $("#summary input[name=TodoRateText]").val() })
+	};
+
+	//ajax call
+	$.ajax({
+		type: "POST",
+		url: "php/todoUpdateRate.php",
+		dataType: 'json',
+		data: sendData, 
+		success: function(json)
+		{
+			console.log(JSON.stringify(json)); // show response from the php script.
+			if (json["status"] =='ok'){
+				todoPageBuilder();
+			}
+			else
+			{
+				error = json['errors'];
+
+				if (error['msg'].length > 0)
+					setTodoErrorMsg(error['msg'].join("<br/>"));
+				else
+					setTodoErrorMsg("Server Error. Pls contact system admin");
+
+				if (error['todorate'])
+					$("#summary input[name=TodoRateText]").addClass("text-error");
 			}
 		},
 		error: function(data,status){
@@ -453,7 +504,7 @@ function incrementTodo(todoId){
 				if (error['msg'].length > 0)
 					setTodoErrorMsg(error['msg'].join("<br/>"));
 				else
-					setTodoErrorMsg("Undefined Error. Pls contact system admin");
+					setTodoErrorMsg("Server Error. Pls contact system admin");
 			}
 		},
 		error: function(data,status){
@@ -486,7 +537,7 @@ function decrementTodo(todoId){
 				if (error['msg'].length > 0)
 					setTodoErrorMsg(error['msg'].join("<br/>"));
 				else
-					setTodoErrorMsg("Undefined Error. Pls contact system admin");
+					setTodoErrorMsg("Server Error. Pls contact system admin");
 			}
 		},
 		error: function(data,status){
@@ -519,7 +570,7 @@ function deleteTodo(todoId){
 				if (error['msg'].length > 0)
 					setTodoErrorMsg(error['msg'].join("<br/>"));
 				else
-					setTodoErrorMsg("Undefined Error. Pls contact system admin");
+					setTodoErrorMsg("Server Error. Pls contact system admin");
 			}
 		},
 		error: function(data,status){
@@ -549,6 +600,53 @@ function editTodo(index, todoId, totalHours, completedHours, important){
 	}
 }
 
+function setRate(completed,total,rate){
+	var days = Math.round((total-completed)/rate);
+	if (days > 0)
+		$("#days-needed").html("~"+days);
+	else 
+		$("#days-needed").html("<1");
+
+	$("#summary input[name=TodoRateText]").val(Math.round(rate));
+}
+
+function hideSummary(){
+	$("#summary").hide();
+}
+
+function displaySummary(completed,total){
+	$("#summary").show();
+	var ratio = completed / total;
+	var diameter = (ratio) * 300;
+	var sides = (300 - diameter)/2 ;
+	var styles = {
+		left : ""+sides+"px",
+		top : ""+sides+"px",
+		width: ""+diameter+"px",
+		height: ""+diameter+"px",
+	};
+
+	$( ".circle-inner" ).css(styles);
+	$( "#stats" ).html(getSummaryStats(completed,total));
+
+	$.ajax({
+		//type: "POST",
+		url: "php/getTodoRate.php",
+		dataType: 'json',
+		success: function(json)
+		{
+			console.log(JSON.stringify(json)); // show response from the php script.
+			if (json["status"] =='ok')
+				setRate(completed,total,parseInt(json['rate']));
+			else
+				setTodoErrorMsg("Server Error. Pls contact system admin");
+		},
+		error: function(data,status){
+			setTodoErrorMsg("Error: "+status+". Pls contact system admin");
+		}
+	});
+}
+
 function todoPageBuilder(){
 	$.ajax({
 		type: "POST",
@@ -561,14 +659,27 @@ function todoPageBuilder(){
 				clearMsgs();
 				clearAllMarkedInputFields();
 				hideAddTodoBar();
+				isEditing = false;
+
 				var todos = json['todos'];
-				$('#todo-list').html("");
+				$('#todo-list').html("");	// clear todo list
+
+				// for cumilative data
+				var totalTodoHours = 0;
+				var completedTodoHours = 0;
 
 				jQuery.each( todos, function( i, todo ) {
 					//console.log(JSON.stringify(todo));
 					$(constructTodo(i,todo)).appendTo( "#todo-list" );
+
+					completedTodoHours += parseInt(todo["completedHrs"]);
+					totalTodoHours += parseInt(todo["totalHrs"]);
 				});
-				isEditing = false;
+
+				if(todos.length>0 && totalTodoHours!=completedTodoHours)
+					displaySummary(completedTodoHours,totalTodoHours);
+				else
+					hideSummary();
 			}
 			else
 				;//error
@@ -631,7 +742,6 @@ $(function(){
 	setUserLoginState();
 	initFormEventHandlers();
 	clearMsgs();
-	
 });
 
 

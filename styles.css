@@ -512,14 +512,19 @@ hr{
 	background-color: #dd4b3b;
     position: relative;
 	left : 90px;
-	top : 180px;
+	top : 90px;
 	width: 120px;
 	height: 120px;
-	-moz-border-radius: 60px;
-    -webkit-border-radius: 60px;
-    -o-border-radius: 60px;
-    border-radius: 60px;
+	-moz-border-radius: 150px;
+    -webkit-border-radius: 150px;
+    -o-border-radius: 150px;
+    border-radius: 150px;
 	border: 1px solid #bbbbbb;
+	-webkit-transition: all .4s ease;
+	-moz-transition: all .4s ease;
+	-o-transition: all .4s ease;
+	-ms-transition: all .4s ease;
+	transition: all .4s ease;
 }
 
 .summary-right {
@@ -530,9 +535,12 @@ hr{
 	font-size: 20px
 }
 
+
 .circle-inner:hover{
 	background-color: #c04133;
 }
+
+
 
 .heading{
 	width : 200px;
