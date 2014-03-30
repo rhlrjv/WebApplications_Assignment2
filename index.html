@@ -151,36 +151,38 @@
 						<hr/>
 						<div id="todo-list">
 						</div>
-						<!-- <div>
-							<div id="todo-0" class="todo-entry" data-todo-id="0" data-todo-no="0"> 
-								<form id="inline-edit-0" data-todo-id="0" data-todo-no="0">
-									<input class="text-entry todo-inline inline-name" placeholder = "Todo Name" 
-										value = "todo name" name="TodoName" type="text"/>
-										<span>Completed : </span>
-									<input class="text-entry  todo-inline hours-entry" 
-										value = "5" name="TodoHoursCompleted" type="number"/>
-										<span>Hrs out of</span>
-									<input class="text-entry  todo-inline hours-entry" 
-										value = "20" name="TodoHours" type="number"/>
-										<span>Hrs</span>
+						<div id="add-todo-text" class="center">
+							<a onclick = "showAddTodoBar()">+<br/>Add New Todo</a>
+						</div>
+						<div id="add-todo-div" class = "todo-entry">
+							<form id="inline-add-todo-form">
+								<input class="text-entry todo-inline inline-name" placeholder = "Todo Name" 
+									value = "" name="TodoName" type="text"/>
+									<span>Completed : </span>
+								<input class="text-entry  todo-inline hours-entry" 
+									value = "0" name="TodoHoursCompleted" type="number"/>
+									<span>Hrs out of</span>
+								<input class="text-entry  todo-inline hours-entry" 
+									value = "1" name="TodoHours" type="number"/>
+									<span>Hrs</span>
 
-									<div class="slideThree inline">	
-										<input type="checkbox" value="None" id="slideThree" name="TodoImportant" />
-										<label for="slideThree"></label>
-									</div>
+								<div class="slideThree inline">	
+									<input type="checkbox" value="None" id="slideThree" name="TodoImportant" />
+									<label for="slideThree"></label>
+								</div>
 
-									<div class = "todo-button inline inline-btn red-btn right" 
-										style = "background-image: url('images/cancel.png'); height: 23px; width: 23px;" 
-										onclick = "todoPageBuilder()">
-									</div>	
+								<div class = "todo-button inline inline-btn red-btn right" 
+									style = "background-image: url('images/cancel.png'); height: 23px; width: 23px;" 
+									onclick = "todoPageBuilder()">
+								</div>	
 
-									<input class = "todo-button inline inline-btn right" value="" type="submit" style = "background-image: url('images/tick.png');"name="editTodoSubmit"/>																	
-								</form>
+								<input class = "todo-button inline inline-btn right" value="" type="submit" style = "background-image: url('images/inc.png');"name="addTodoSubmit"/>																	
+							</form>
 
-								<div class="clear"></div> 
-							</div>
-							<hr/>
-						</div> -->
+							<div class="clear"></div> 
+							
+						</div>
+						<hr/>
 					</div>
 				</div>
 			</div>

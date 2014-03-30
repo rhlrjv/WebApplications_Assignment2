@@ -66,9 +66,9 @@
 		$requestCompletedhrs = $data["TodoHoursCompleted"];
 
 	if(isset($data["TodoImportant"]))
-		$requestImp = true;
+		$requestImp = 1;
 	else
-		$requestImp = false;
+		$requestImp = 0;
 
 	// ------------------------------------------------
 	// Check parameters

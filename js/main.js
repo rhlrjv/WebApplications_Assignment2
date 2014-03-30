@@ -147,6 +147,11 @@ function initFormEventHandlers(){
 		event.preventDefault();
 		signupFormSubmit();
 	});
+
+	$( "#inline-add-todo-form" ).on( "submit", function( event ) {
+		event.preventDefault();
+		addTodoSubmit();
+	});
 }
 
 function clearAllMarkedInputFields(){
@@ -290,7 +295,62 @@ function editTodoSubmit(todoID){
 	});
 }
 
+function addTodoSubmit(todoID){
+	clearAllMarkedInputFields();
+	//define data to send
+	var sendData = {
+		requestType: "AddTodo",
+		data : JSON.stringify($("#inline-add-todo-form").serializeObject())
+	};
+
+	//ajax call
+	$.ajax({
+		type: "POST",
+		url: "php/todoCreate.php",
+		dataType: 'json',
+		data: sendData, 
+		success: function(json)
+		{
+			console.log(JSON.stringify(json)); // show response from the php script.
+			if (json["status"] =='ok'){
+				$("#inline-add-todo-form")[0].reset(); //clear the form
+				todoPageBuilder();
+			}
+			else
+			{
+				error = json['errors'];
+
+				if (error['msg'].length > 0)
+					setTodoErrorMsg(error['msg'].join("<br/>"));
+				else
+					setTodoErrorMsg("Undefined Error. Pls contact system admin");
+
+				if (error['taskname'])
+					$("#inline-add-todo-form input[name=TodoName]").addClass("text-error");
+				if (error['totalhrs'])
+					$("#inline-add-todo-form input[name=TodoHours]").addClass("text-error");
+				if (error['completedhrs'])
+					$("#inline-add-todo-form input[name=TodoHoursCompleted]").addClass("text-error");
+			}
+		},
+		error: function(data,status){
+			setTodoErrorMsg("Error. Status: "+status+". Pls contact system admin");
+		}
+	});
+}
+
 //ToDo Page functions ///////////////////////////////////////////////////
+
+function showAddTodoBar(){
+	$("#add-todo-text").hide();
+	$("#add-todo-div").fadeIn();
+}
+
+function hideAddTodoBar(){
+	$("#add-todo-div").hide();
+	$("#add-todo-text").fadeIn();
+	
+}
 
 function incrementTodo(todoId){
 	var sendData = {
@@ -423,6 +483,7 @@ function todoPageBuilder(){
 			if (json["status"] =='ok'){
 				clearMsgs();
 				clearAllMarkedInputFields();
+				hideAddTodoBar();
 				var todos = json['todos'];
 				$('#todo-list').html("");
 
@@ -487,6 +548,7 @@ $(function(){
 				todoPageBuilder();
 		}
 	}); //enable the tabs
+	$("#add-todo-div").hide();
 	setUserLoginState();
 	initFormEventHandlers();
 	clearMsgs();
