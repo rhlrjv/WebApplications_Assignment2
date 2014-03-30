@@ -58,7 +58,16 @@
 		$errors['id'] = true;
 		goto leave;
 	}
-
+	else
+	{
+		$timeinfo = $GLOBALS['taskobj']->getHrsById($_SESSION['dbconn'], $requestId, $requestUsername);
+		if($timeinfo['completedhrs'] == 0)
+		{
+			$errors['msg'][] ='Completed hours is already zero';
+			$errors['completedhrs'] = true;
+			goto leave;
+		}
+	}
 	// ------------------------------------------------
 	// Perform operation 
 	// ------------------------------------------------

@@ -6,6 +6,20 @@
 		var $email;
 		var $dob;
 		
+		//Hash generated of the string provided
+		// HASH FUNCTION USED: Blowfish algorithm
+		// SALT USED: Randomly generated or each password
+		function generateHash($password)
+		{
+			if(defined("CRYPT_BLOWFISH") && CRYPT_BLOWFISH)
+			{
+				$salt = '$2y$11$'.substr(md5(uniqid(rand(), true)), 0, 22);
+				$hashedPassword = crypt($password, $salt);
+				return $hashedPassword;
+			}
+
+		}
+
 		//Get user info when username is provided
 		function getUserObj ($dbconn, $argUsername)
 		{
@@ -53,9 +67,11 @@
 		{
 			if($dbconn != '')
 			{
+				$hashedPassword = $this->generateHash($argPassword);
+				
 				$signup_query="INSERT INTO users (username, pwd, email, dob) values($1, $2, $3, $4);";
 				$result = pg_prepare($dbconn, "newuser_query", $signup_query);
-				$result = pg_execute($dbconn, "newuser_query", array($argUsername, $argPassword, $argEmail, $argDob));
+				$result = pg_execute($dbconn, "newuser_query", array($argUsername, $hashedPassword, $argEmail, $argDob));
 				if($result)
 					return true; 
 				else
@@ -68,9 +84,10 @@
 		{
 			if($dbconn != '')
 			{
+				$hashedPassword = $this->generateHash($argPassword);
 				$update_query="UPDATE users SET pwd = $1, email = $2, dob = $3 WHERE username = $4;";
 				$result = pg_prepare($dbconn, "updateProfile_query", $update_query);
-				$result = pg_execute($dbconn, "updateProfile_query", array($argPassword, $argEmail, $argDob, $argUsername));
+				$result = pg_execute($dbconn, "updateProfile_query", array($hashedPassword, $argEmail, $argDob, $argUsername));
 				if($result)
 				{
 						$this->username = $argUsername;
@@ -89,20 +106,23 @@
 		{
 			if($dbconn != '')
 			{
-				$login_query="SELECT * FROM users WHERE username = $1 AND pwd = $2;";
+				$login_query="SELECT * FROM users WHERE username = $1;";
 				$result = pg_prepare($dbconn, "my_query", $login_query);
-				$result = pg_execute($dbconn, "my_query", array($argUsername,$argPassword));				
+				$result = pg_execute($dbconn, "my_query", array($argUsername));				
 				if($result)
 				{
 					$rows = pg_num_rows($result); 
 					if($rows)
 					{
 						$rowContent = pg_fetch_row($result);
-						$this->username = $rowContent[0];
-						$this->password = $rowContent[1];
-						$this->email = $rowContent[2];
-						$this->dob = $rowContent[3];
-						return true;
+						if(crypt($argPassword, $rowContent[1]) == $rowContent[1])
+						{
+							$this->username = $rowContent[0];
+							$this->password = $rowContent[1];
+							$this->email = $rowContent[2];
+							$this->dob = $rowContent[3];
+							return true;
+						}
 					}
 					else
 						return false;
