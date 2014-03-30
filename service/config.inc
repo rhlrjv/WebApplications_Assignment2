@@ -4,5 +4,5 @@
 	$db_password="ishaan";
 	//$url_prefix="http://localhost/mypages/cp3101b/WebApplications_Assignment2/"; 
 	//the base folder address
-	$session_save_path="sess";
+	$session_save_path="sessions";
 ?>
