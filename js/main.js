@@ -147,6 +147,11 @@ function initFormEventHandlers(){
 		event.preventDefault();
 		signupFormSubmit();
 	});
+
+	$( "#profile-form" ).on( "submit", function( event ) {
+		event.preventDefault();
+		profileFormSubmit();
+	});
 }
 
 function clearAllMarkedInputFields(){
@@ -554,6 +559,8 @@ $(function(){
 
 			if(ui.newTab.index() == 3) //todopage
 				todoPageBuilder();
+			if(ui.newTab.index() == 4) //profilepage
+				profilePageBuilder();
 		}
 	}); //enable the tabs
 	setUserLoginState();
