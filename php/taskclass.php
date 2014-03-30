@@ -45,9 +45,9 @@
 		{
 			if($dbconn != '')
 			{
-				$checkIdExists_query="SELECT * FROM task WHERE id = $1 AND username = $2;";
-				$result = pg_prepare($dbconn, "checkId_query", $checkIdExists_query);
-				$result = pg_execute($dbconn, "checkId_query", array($argId, $argUsername));
+				$getHrsById_query="SELECT * FROM task WHERE id = $1 AND username = $2;";
+				$result = pg_prepare($dbconn, "getHrs_query", $getHrsById_query);
+				$result = pg_execute($dbconn, "getHrs_query", array($argId, $argUsername));
 				$timeinfo = array();
 				if(pg_num_rows($result))
 				{
