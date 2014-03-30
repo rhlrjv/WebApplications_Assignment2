@@ -88,6 +88,12 @@
 		$errors['taskname'] = true;
 	}
 
+	if(strlen($requestTaskname) > 40)
+	{
+		$errors['msg'][] ='Task name should be less than 40 characters';
+		$errors['taskname'] = true;
+	}
+
 	if (preg_match('/[\'^£$%&*()}{@#~?><>,|=+¬-]/', $requestTaskname))
 	{
 	    $errors['msg'][] ='Taskname cannot have special characters';

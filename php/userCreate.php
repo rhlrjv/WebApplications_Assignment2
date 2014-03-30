@@ -80,6 +80,12 @@
 			$errors['dob'] = true;
 	}
 
+	if(strlen($requestUsername) > 20)
+	{
+		$errors['msg'][] ='Username should be less than 20 characters';
+		$errors['username'] = true;
+	}
+
 	if($requestPassword != $requestReenterpassword)
 	{
 		$errors['msg'][] ='Passwords dont match';
