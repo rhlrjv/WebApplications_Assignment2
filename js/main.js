@@ -290,6 +290,75 @@ function editTodoSubmit(todoID){
 	});
 }
 
+function profileFormSubmit(){
+
+	clearAllMarkedInputFields();
+
+	//define data to send
+	var sendData = {
+		requestType: "profileSubmit",
+		data : JSON.stringify($("#profile-form").serializeObject())
+	};
+
+	//ajax call
+	$.ajax({
+		type: "POST",
+		url: "php/userUpdate.php",
+		dataType: 'json',
+		data: sendData, 
+		success: function(json)
+		{
+			console.log(JSON.stringify(json)); // show response from the php script.
+			if (json["status"] =='ok'){
+				accessTodoPage();
+			}
+			else
+			{
+				error = json['errors'];
+
+				if (error['msg'].length > 0)
+					setFormErrorMsg(error['msg'].join("<br/>"));
+				else
+					setFormErrorMsg("Undefined Error. Pls contact system admin");
+
+				if (error['username'])
+					$("#profile-form input[name=profile_UserName]").addClass("text-error");
+				if (error['password'])
+					$("#profile-form input[name=profile_Password]").addClass("text-error");
+				if (error['reenterpassword'])
+					$("#profile-form input[name=profile_reEnterPassword]").addClass("text-error");
+				if (error['email'])
+					$("#profile-form input[name=profile_email]").addClass("text-error");
+				if (error['dob'])
+					$("#profile-form input[name=profile_dob]").addClass("text-error");
+			}
+		}
+	});
+}
+
+//Profile Page functions ///////////////////////////////////////////////////
+function profilePageBuilder(){
+	$.ajax({
+		type: "POST",
+		url: "php/userRead.php",
+		dataType: 'json',
+		success: function(json)
+		{
+			console.log(JSON.stringify(json)); // show response from the php script.
+			if (json["status"] =='ok'){
+				var userinfo = json['userinfo'];
+					$("#profile-form input[name=profile_UserName]").val(userinfo['username']);
+					$("#profile-form input[name=profile_Password]").val("");
+					$("#profile-form input[name=profile_reEnterPassword]").val("");
+					$("#profile-form input[name=profile_email]").val(userinfo['email']);
+					$("#profile-form input[name=profile_dob]").val(userinfo['dob']);
+			}
+			else
+				;//error
+		}
+	});
+}
+
 //ToDo Page functions ///////////////////////////////////////////////////
 
 function incrementTodo(todoId){
