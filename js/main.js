@@ -344,7 +344,6 @@ function addTodoSubmit(todoID){
 	});
 }
 
-
 function profileFormSubmit(){
 
 	clearAllMarkedInputFields();
@@ -393,7 +392,6 @@ function profileFormSubmit(){
 		}
 	});
 }
-
 
 //Profile Page functions ///////////////////////////////////////////////////
 function profilePageBuilder(){
