@@ -40,6 +40,27 @@
 			}
 		}
 		
+		//Get task time details with given ID
+		function getHrsById ($dbconn, $argId, $argUsername)
+		{
+			if($dbconn != '')
+			{
+				$checkIdExists_query="SELECT * FROM task WHERE id = $1 AND username = $2;";
+				$result = pg_prepare($dbconn, "checkId_query", $checkIdExists_query);
+				$result = pg_execute($dbconn, "checkId_query", array($argId, $argUsername));
+				$timeinfo = array();
+				if(pg_num_rows($result))
+				{
+					$row = pg_fetch_row($result); 
+					
+					$timeinfo['totalhrs'] = $row[2];
+					$timeinfo['completedhrs'] = $row[3];
+					
+					return $timeinfo;
+				}
+			}
+		}
+		
 		//Add a new to do
 		function addtodo($dbconn, $argTaskname, $argTotalHrs, $argCompletedhrs, $argImp, $argUsername)
 		{

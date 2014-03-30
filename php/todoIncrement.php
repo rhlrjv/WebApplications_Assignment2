@@ -59,6 +59,16 @@
 		$errors['id'] = true;
 		goto leave;
 	}
+	else
+	{
+		$timeinfo = $GLOBALS['taskobj']->getHrsById($_SESSION['dbconn'], $requestId, $requestUsername);
+		if($timeinfo['completedhrs'] == $timeinfo['totalhrs'])
+		{
+			$errors['msg'][] ='Completed hours equal total hours';
+			$errors['completedhrs'] = true;
+			goto leave;
+		}
+	}
 
 	// ------------------------------------------------
 	// Perform operation 
