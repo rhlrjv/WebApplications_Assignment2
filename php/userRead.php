@@ -67,7 +67,7 @@
 	{
 		$reply['status'] ='ok';
 		$userinfo['username'] = $currentUserObj->getUsername(); ;
-		$userinfo['password'] = $currentUserObj->getPassword() ;
+		// Password not retrieved as it is hashed and hence real password cannot be retrieved.
 		$userinfo['email'] = $currentUserObj->getEmail() ;
 		$userinfo['dob'] = $currentUserObj->getDob() ; 
 	}
