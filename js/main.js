@@ -157,7 +157,6 @@ function initFormEventHandlers(){
 		event.preventDefault();
 		profileFormSubmit();
 	});
-
 }
 
 function clearAllMarkedInputFields(){
@@ -394,7 +393,6 @@ function profileFormSubmit(){
 		}
 	});
 }
-
 
 
 //Profile Page functions ///////////////////////////////////////////////////
